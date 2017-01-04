@@ -14,13 +14,13 @@
     <title>Практическое задание</title>
 </head>
 <style type="text/css">
-    <%@include file="/css/jquery.cleditor.css"%>
+    <%@include file="/WEB-INF/jsp/css/jquery.cleditor.css"%>
 </style>
 <script >
-    <%@include file="/js/jquery-1.8.2.min.js"%>
+    <%@include file="/WEB-INF/jsp/js/jquery-1.8.2.min.js"%>
 </script >
 <script >
-    <%@include file="/js/jquery.cleditor.min.js"%>
+    <%@include file="/WEB-INF/jsp/js/jquery.cleditor.min.js"%>
 </script >
 
 <script>
@@ -34,7 +34,7 @@
 
 
 <form method="post"
-      action="${pageContext.request.contextPath}/practical/save/${practical.id}/${subjectid}">
+      action="${pageContext.request.contextPath}/practical?operation=save&pk=${practical.id}&subjectid=${subjectid}">
     <fieldset>
         <legend>
             <c:choose>
@@ -69,7 +69,7 @@
 
 
     <div class="button-row">
-        <a href="${pageContext.request.contextPath}/subject/edit/${subjectid}">Отмена</a> or <input type="submit" value="Сохранить" />
+        <a href="${pageContext.request.contextPath}/subject?operation=edit&pk=${subjectid}">Отмена</a> or <input type="submit" value="Сохранить" />
     </div>
 </form>
 

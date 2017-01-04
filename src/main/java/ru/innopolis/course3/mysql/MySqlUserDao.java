@@ -1,8 +1,8 @@
 package ru.innopolis.course3.mysql;
 
 
-import ru.innopolis.course3.Pojo.Role;
-import ru.innopolis.course3.Pojo.User;
+import ru.innopolis.course3.pojo.Role;
+import ru.innopolis.course3.pojo.User;
 import ru.innopolis.course3.dao.AbstractJDBCDao;
 import ru.innopolis.course3.dao.DataException;
 

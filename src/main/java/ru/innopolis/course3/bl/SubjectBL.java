@@ -1,6 +1,6 @@
-package ru.innopolis.course3.BL;
+package ru.innopolis.course3.bl;
 
-import ru.innopolis.course3.Pojo.Subject;
+import ru.innopolis.course3.pojo.Subject;
 import ru.innopolis.course3.dao.DaoFactory;
 import ru.innopolis.course3.dao.DataException;
 import ru.innopolis.course3.dao.UniversalDao;
@@ -46,5 +46,13 @@ public class SubjectBL {
         return (Subject)subjectDao.getByPK(id);
     }
 
+    public Subject subjectFromPK(String pk)throws DataException{
+        Subject subject = null;
+        if(pk != null){
+            int id = Integer.parseInt(pk);
+            subject = getByPK(id);
+        }
+        return subject;
+    }
 
 }

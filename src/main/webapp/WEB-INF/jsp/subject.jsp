@@ -18,7 +18,7 @@
 
 <h1>Список тем</h1>
 
-<a href="${pageContext.servletContext.contextPath}/subject/create">Добавить тему</a>
+<a href="${pageContext.servletContext.contextPath}/subject?operation=create">Добавить тему</a>
 
 <table border="1">
     <tr>
@@ -28,8 +28,8 @@
         <tr valign="top">
             <td>${Subject.name}</td>
             <td>
-                <a href="${pageContext.servletContext.contextPath}/subject/edit/${Subject.id}">Редактировать/Просмотр</a>
-                <a href="${pageContext.servletContext.contextPath}/subject/delete/${Subject.id}">Удалить</a>
+                <a href="${pageContext.servletContext.contextPath}/subject?operation=edit&pk=${Subject.id}">Редактировать/Просмотр</a>
+                <a href="${pageContext.servletContext.contextPath}/subject?operation=delete&pk=${Subject.id}">Удалить</a>
             </td>
         </tr>
     </j:forEach>

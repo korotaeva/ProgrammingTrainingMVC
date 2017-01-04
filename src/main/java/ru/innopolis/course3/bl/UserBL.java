@@ -1,7 +1,7 @@
-package ru.innopolis.course3.BL;
+package ru.innopolis.course3.bl;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import ru.innopolis.course3.Pojo.User;
+import ru.innopolis.course3.pojo.User;
 import ru.innopolis.course3.dao.DaoFactory;
 import ru.innopolis.course3.dao.DataException;
 import ru.innopolis.course3.dao.UniversalDao;

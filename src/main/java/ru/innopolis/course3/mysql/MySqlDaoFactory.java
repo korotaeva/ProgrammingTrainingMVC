@@ -1,9 +1,9 @@
 package ru.innopolis.course3.mysql;
 
 
-import ru.innopolis.course3.Pojo.PracticalAssignments;
-import ru.innopolis.course3.Pojo.Subject;
-import ru.innopolis.course3.Pojo.User;
+import ru.innopolis.course3.pojo.PracticalAssignments;
+import ru.innopolis.course3.pojo.Subject;
+import ru.innopolis.course3.pojo.User;
 import ru.innopolis.course3.dao.DaoFactory;
 import ru.innopolis.course3.dao.DataException;
 import ru.innopolis.course3.dao.UniversalDao;
@@ -21,8 +21,8 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
 
     private String user = "root";//Логин пользователя
     private String password = "123498765";//Пароль пользователя
-    private String url = "jdbc:ru.innopolis.course3.mysql://localhost:3306/programming_training";//URL адрес
-    private String driver = "com.ru.innopolis.course3.mysql.jdbc.Driver";//Имя драйвера
+    private String url = "jdbc:mysql://localhost:3306/programming_training";//URL адрес
+    private String driver = "com.mysql.jdbc.Driver";//Имя драйвера
 
 
     private Map<Class, DaoCreator> creators;

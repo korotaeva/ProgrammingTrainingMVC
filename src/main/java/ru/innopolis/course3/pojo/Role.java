@@ -1,4 +1,4 @@
-package ru.innopolis.course3.Pojo;
+package ru.innopolis.course3.pojo;
 
 /**
  * Created by korot on 25.12.2016.

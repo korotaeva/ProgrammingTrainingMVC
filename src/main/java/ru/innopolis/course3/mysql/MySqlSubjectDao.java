@@ -1,7 +1,7 @@
 package ru.innopolis.course3.mysql;
 
 
-import ru.innopolis.course3.Pojo.Subject;
+import ru.innopolis.course3.pojo.Subject;
 import ru.innopolis.course3.dao.AbstractJDBCDao;
 import ru.innopolis.course3.dao.DataException;
 

@@ -35,7 +35,7 @@
     </table>
 </form>
 <script >
-    <%@include file="/js/jquery-1.8.2.min.js"%>
+    <%@include file="/WEB-INF/jsp/js/jquery-1.8.2.min.js"%>
 </script >
 <script type="text/javascript">
     function clearVal(val, limit){

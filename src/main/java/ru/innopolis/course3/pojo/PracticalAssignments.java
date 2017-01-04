@@ -1,4 +1,4 @@
-package ru.innopolis.course3.Pojo;
+package ru.innopolis.course3.pojo;
 
 import ru.innopolis.course3.dao.Identified;
 

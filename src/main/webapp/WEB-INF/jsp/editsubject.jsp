@@ -15,21 +15,20 @@
 </head>
 <style type="text/css">
 
-    <%@include file="/css/jquery.cleditor.css"%>
+    <%@include file="/WEB-INF/jsp/css/jquery.cleditor.css"%>
 </style>
 
 <script >
-    <%@include file="/js/jquery-1.8.2.min.js"%>
+    <%@include file="/WEB-INF/jsp/js/jquery-1.8.2.min.js"%>
 </script >
 <script >
-    <%@include file="/js/jquery.cleditor.min.js"%>
+    <%@include file="/WEB-INF/jsp/js/jquery.cleditor.min.js"%>
 </script >
 
 <script>
     $(document).ready(function () { $("#description").cleditor(); });
 </script>
 <%--<img src="/getImage.action?imageId=css/images/toolbar.gif"/>--%>
-<img src="C:\Projects\Java\Innopolis\Homeworks\ProgrammingTraining2\src\main\webapp\css\images\toolbar.gif"/>
 <body>
 <a  valign="top" href="${pageContext.servletContext.contextPath}/logout">Выйти</a>
 
@@ -37,7 +36,7 @@
 
 
 <form method="post"
-      action="${pageContext.request.contextPath}/subject/save">
+      action="${pageContext.request.contextPath}/subject?operation=save">
     <fieldset>
         <legend>
             <c:choose>
@@ -71,7 +70,7 @@
         <legend>
            Практические задания
         </legend>
-        <a href="${pageContext.servletContext.contextPath}/practical/create//${subject.id}">Добавить практическое задание</a>
+        <a href="${pageContext.servletContext.contextPath}/practical?operation=create&pk=${subject.id}">Добавить практическое задание</a>
 
         <table border="1">
             <tr>
@@ -81,8 +80,8 @@
                 <tr valign="top">
                     <td>${practical.name}</td>
                     <td>
-                        <a href="${pageContext.servletContext.contextPath}/practical/edit/${practical.id}/${subject.id}">Редактировать/Просмотр</a>
-                        <a href="${pageContext.servletContext.contextPath}/practical/delete/${practical.id}/${subject.id}">Удалить</a>
+                        <a href="${pageContext.servletContext.contextPath}/practical?operation=edit&pk=${practical.id}&subjectid=${subject.id}">Редактировать/Просмотр</a>
+                        <a href="${pageContext.servletContext.contextPath}/practical?operation=delete&pk=${practical.id}&subjectid=${subject.id}">Удалить</a>
                     </td>
                 </tr>
             </c:forEach>
