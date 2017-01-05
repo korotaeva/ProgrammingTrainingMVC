@@ -70,7 +70,7 @@
         <legend>
            Практические задания
         </legend>
-        <a href="${pageContext.servletContext.contextPath}/practical?operation=create&pk=${subject.id}">Добавить практическое задание</a>
+        <a href="${pageContext.servletContext.contextPath}/practical?operation=create&subjectid=${subject.id}">Добавить практическое задание</a>
 
         <table border="1">
             <tr>

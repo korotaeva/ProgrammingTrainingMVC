@@ -48,6 +48,7 @@ public class AuthorizationController {
         } catch (DataException e) {
             ErrorProcessing("Ошибка при чтении пользователя", e, model);
             model.setViewName("error");
+            return model;
         }
 
         if (req.getParameter("save") != null){
@@ -62,6 +63,7 @@ public class AuthorizationController {
             catch (DataException e){
                 ErrorProcessing("Ошибка при создании пользователя", e, model);
                 model.setViewName("error");
+                return model;
             }
             model.addObject("user", user);
 
@@ -84,6 +86,7 @@ public class AuthorizationController {
             catch (DataException e){
                 ErrorProcessing("Ошибка при получении польвателя по логину и паролю", e, model);
                 model.setViewName("error");
+                return model;
             }
 
             if (id != null){

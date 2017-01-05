@@ -39,8 +39,8 @@ public class SubjectController {
         catch (DataException e){
             ErrorProcessing("Ошибка при инициализации темы", e, model);
             model.setViewName("error");
+            return model;
         }
-
 
         Subject subject = null;
         try {
@@ -49,10 +49,12 @@ public class SubjectController {
         catch (DataException e){
             ErrorProcessing("Ошибка при чтении по ключу", e, model);
             model.setViewName("error");
+            return model;
         }
         catch (NumberFormatException e) {
             ErrorProcessing("Не корректный формат ключа", e, model);
             model.setViewName("error");
+            return model;
         }
 
 
@@ -73,6 +75,7 @@ public class SubjectController {
                     catch (DataException e){
                         ErrorProcessing("Ошибка при получении списка практичексих заданий", e, model);
                         model.setViewName("error");
+                        return model;
                     }
                     break;
                 case "delete":
@@ -82,6 +85,7 @@ public class SubjectController {
                     catch (DataException e){
                         ErrorProcessing("Ошибка при удалении темы", e, model);
                         model.setViewName("error");
+                        return model;
                     }
                     break;
             }
@@ -93,6 +97,7 @@ public class SubjectController {
         catch (DataException e){
             ErrorProcessing("Ошибка при получении списка тем", e, model);
             model.setViewName("error");
+            return model;
         }
         return model;
     }
@@ -103,12 +108,9 @@ public class SubjectController {
     }
 
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView getSubjectSave(HttpServletRequest req,  @RequestParam(value = "operation", required = false) String operation,
-                                       @RequestParam(value = "pk", required = false) String pk,
-                                       @RequestParam(value = "subjectid", required = false) String subjectid) {
+    @RequestMapping(method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    public ModelAndView getSubjectSave(HttpServletRequest req,  @RequestParam(value = "operation", required = false) String operation) {
         ModelAndView model = new ModelAndView();
-
 
         if(operation != null && operation.equals("save")){
             String name = req.getParameter("name");
@@ -124,6 +126,7 @@ public class SubjectController {
                 catch (DataException e){
                     ErrorProcessing("Ошибка при создании темы", e, model);
                     model.setViewName("error");
+                    return model;
                 }
 
             } else {
@@ -134,6 +137,7 @@ public class SubjectController {
                 catch (DataException e){
                     ErrorProcessing("Ошибка при изменении темы", e, model);
                     model.setViewName("error");
+                    return model;
                 }
             }
 

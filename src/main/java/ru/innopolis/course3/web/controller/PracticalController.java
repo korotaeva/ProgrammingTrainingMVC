@@ -36,8 +36,9 @@ public class PracticalController {
         try {
             practicalBL = new PracticalAssignmentsBL();
         } catch (DataException e) {
-            ErrorProcessing("Ошибка при инициализации практического задания", e, model);
+            ErrorProcessing("Ошибка при инициализации", e, model);
             model.setViewName("error");
+            return model;
         }
 
         PracticalAssignments practical = null;
@@ -47,10 +48,12 @@ public class PracticalController {
         catch (DataException e){
             ErrorProcessing("Ошибка при чтении практического задания по ключу", e, model);
             model.setViewName("error");
+            return model;
         }
         catch (NumberFormatException e) {
             ErrorProcessing("Некорректный формат ключа", e, model);
             model.setViewName("error");
+            return model;
         }
         model.setViewName("editsubject");
 
@@ -74,6 +77,7 @@ public class PracticalController {
                     catch (DataException e){
                         ErrorProcessing("Ошибка при удалении практического задания", e, model);
                         model.setViewName("error");
+                        return model;
                     }
                     model.setViewName("redirect:/subject?edit="+ idSubject);
                     break;
@@ -86,6 +90,7 @@ public class PracticalController {
         catch (DataException e){
             ErrorProcessing("Ошибка при получении списка практических заданий", e, model);
             model.setViewName("error");
+            return model;
         }
 
         return model;
@@ -108,6 +113,7 @@ public class PracticalController {
         } catch (DataException e) {
             ErrorProcessing("Ошибка при инициализации практического задания", e, model);
             model.setViewName("error");
+            return model;
         }
 
         Integer idSubject = practicalBL.getIdSubject(subjectid);
@@ -125,6 +131,7 @@ public class PracticalController {
             catch (DataException e){
                 ErrorProcessing("Не найдена тема с данным ключом", e, model);
                 model.setViewName("error");
+                return model;
             }
 
             PracticalAssignments practical;
@@ -136,6 +143,7 @@ public class PracticalController {
                 catch (DataException e){
                     ErrorProcessing("Ошибка при создании практического задания", e, model);
                     model.setViewName("error");
+                    return model;
                 }
 
             } else {
@@ -146,6 +154,7 @@ public class PracticalController {
                 catch (DataException e){
                     ErrorProcessing("Ошибка при обновлении практического задания", e, model);
                     model.setViewName("error");
+                    return model;
                 }
             }
         }
