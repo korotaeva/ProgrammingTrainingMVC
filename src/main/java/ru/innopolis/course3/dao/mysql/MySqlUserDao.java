@@ -1,6 +1,7 @@
-package ru.innopolis.course3.mysql;
+package ru.innopolis.course3.dao.mysql;
 
 
+import org.springframework.stereotype.Repository;
 import ru.innopolis.course3.pojo.Role;
 import ru.innopolis.course3.pojo.User;
 import ru.innopolis.course3.dao.AbstractJDBCDao;
@@ -13,8 +14,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Реализациия класса пользователей на ru.innopolis.course3.mysql
+ * Реализациия класса пользователей на ru.innopolis.course3.dao.mysql
  */
+//@Repository
 public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
 
     private class UserById extends User {

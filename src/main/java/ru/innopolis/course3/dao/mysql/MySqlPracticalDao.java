@@ -1,5 +1,6 @@
-package ru.innopolis.course3.mysql;
+package ru.innopolis.course3.dao.mysql;
 
+import org.springframework.stereotype.Repository;
 import ru.innopolis.course3.pojo.PracticalAssignments;
 import ru.innopolis.course3.pojo.Subject;
 import ru.innopolis.course3.dao.AbstractJDBCDao;
@@ -12,9 +13,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Реализациия класса практических заданий на ru.innopolis.course3.mysql
+ * Реализациия класса практических заданий на ru.innopolis.course3.dao.mysql
  */
-public class MySqlPracticalDao extends AbstractJDBCDao<PracticalAssignments, Integer> {
+//@Repository
+public class MySqlPracticalDao extends AbstractJDBCDao<PracticalAssignments,Integer> {
 
     private class PracticalById extends PracticalAssignments {
         public void setId(int id) {

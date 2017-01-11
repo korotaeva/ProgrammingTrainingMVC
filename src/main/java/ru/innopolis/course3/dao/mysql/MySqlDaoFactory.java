@@ -1,4 +1,4 @@
-package ru.innopolis.course3.mysql;
+package ru.innopolis.course3.dao.mysql;
 
 
 import ru.innopolis.course3.pojo.PracticalAssignments;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Фабрика объектов для работы с базой данных на ru.innopolis.course3.mysql
+ * Фабрика объектов для работы с базой данных на ru.innopolis.course3.dao.mysql
  */
 public class MySqlDaoFactory implements DaoFactory<Connection> {
 

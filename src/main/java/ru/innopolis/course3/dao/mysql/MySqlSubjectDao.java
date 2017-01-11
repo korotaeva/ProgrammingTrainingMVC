@@ -1,6 +1,7 @@
-package ru.innopolis.course3.mysql;
+package ru.innopolis.course3.dao.mysql;
 
 
+import org.springframework.stereotype.Repository;
 import ru.innopolis.course3.pojo.Subject;
 import ru.innopolis.course3.dao.AbstractJDBCDao;
 import ru.innopolis.course3.dao.DataException;
@@ -12,8 +13,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Реализациия класса тем на ru.innopolis.course3.mysql
+ * Реализациия класса тем на ru.innopolis.course3.dao.mysql
  */
+//@Repository
 public class MySqlSubjectDao extends AbstractJDBCDao<Subject, Integer> {
 
 

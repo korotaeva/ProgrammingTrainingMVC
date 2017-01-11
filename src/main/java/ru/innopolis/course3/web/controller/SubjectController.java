@@ -2,6 +2,7 @@ package ru.innopolis.course3.web.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,8 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import ru.innopolis.course3.bl.PracticalAssignmentsBL;
-import ru.innopolis.course3.bl.SubjectBL;
+import ru.innopolis.course3.bl.*;
 import ru.innopolis.course3.pojo.PracticalAssignments;
 import ru.innopolis.course3.pojo.Subject;
 import ru.innopolis.course3.dao.DataException;
@@ -25,26 +25,25 @@ import java.util.List;
 @Controller
 public class SubjectController {
 
+    ISubjectBL subjectBL;
+
+    @Autowired
+    public SubjectController(ISubjectBL subjectbl) {
+        this.subjectBL = subjectbl;
+    }
+
     public static Logger logger = LoggerFactory.getLogger(SubjectController.class);
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView getSubject(@RequestParam(value = "operation", required = false) String operation,
                                    @RequestParam(value = "pk", required = false) String pk){
+       
         ModelAndView model = new ModelAndView();
         model.setViewName("subject");
-        SubjectBL subjectBL = null;
-        try {
-            subjectBL = new SubjectBL();
-        }
-        catch (DataException e){
-            ErrorProcessing("Ошибка при инициализации темы", e, model);
-            model.setViewName("error");
-            return model;
-        }
 
         Subject subject = null;
         try {
-            subject = subjectBL.subjectFromPK(pk);
+            subject = (Subject)subjectBL.getFromPK(pk);
         }
         catch (DataException e){
             ErrorProcessing("Ошибка при чтении по ключу", e, model);
@@ -68,7 +67,7 @@ public class SubjectController {
                     model.addObject("subject", subject);
                     try {
                         if(subject != null){
-                            List<PracticalAssignments> practicals= new PracticalAssignmentsBL().getAllBySubject(subject.getId().toString());
+                            List<PracticalAssignments> practicals= new PracticalAssignmentsBL().getAllByKey(subject.getId().toString(),"subject");
                             model.addObject("Practicals", practicals);
                         }
                     }
@@ -121,7 +120,7 @@ public class SubjectController {
             if (id == null || id.isEmpty()) {
                 subject = new Subject(name, description);
                 try {
-                    (new SubjectBL()).create(subject);
+                    subjectBL.create(subject);
                 }
                 catch (DataException e){
                     ErrorProcessing("Ошибка при создании темы", e, model);
@@ -132,7 +131,7 @@ public class SubjectController {
             } else {
                 subject = new Subject(name, description, Integer.parseInt(id));
                 try {
-                    (new SubjectBL()).update(subject);
+                    subjectBL.update(subject);
                 }
                 catch (DataException e){
                     ErrorProcessing("Ошибка при изменении темы", e, model);

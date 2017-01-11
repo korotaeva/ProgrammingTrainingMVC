@@ -2,11 +2,17 @@ package ru.innopolis.course3.web.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import ru.innopolis.course3.bl.BService;
+import ru.innopolis.course3.bl.IPracticalAssignmentsBL;
 import ru.innopolis.course3.bl.PracticalAssignmentsBL;
 import ru.innopolis.course3.bl.SubjectBL;
 import ru.innopolis.course3.dao.DataException;
@@ -22,8 +28,16 @@ import java.util.List;
 @RequestMapping(value = { "/practical**" })
 @Controller
 public class PracticalController {
+
+    IPracticalAssignmentsBL iPracticalAssignmentsBL;
+
     public static Logger logger = LoggerFactory.getLogger(SubjectController.class);
 
+
+    @Autowired
+    public PracticalController(IPracticalAssignmentsBL practicalAssignmentsBL) {
+        this.iPracticalAssignmentsBL = practicalAssignmentsBL;
+    }
 
 
     @RequestMapping(method = RequestMethod.GET)
@@ -32,18 +46,11 @@ public class PracticalController {
                                    @RequestParam(value = "subjectid", required = false) String subjectid){
         ModelAndView model = new ModelAndView();
         model.setViewName("practical");
-        PracticalAssignmentsBL practicalBL = null;
-        try {
-            practicalBL = new PracticalAssignmentsBL();
-        } catch (DataException e) {
-            ErrorProcessing("Ошибка при инициализации", e, model);
-            model.setViewName("error");
-            return model;
-        }
+
 
         PracticalAssignments practical = null;
         try {
-            practical = practicalBL.practicalFromPK(pk);
+            practical = (PracticalAssignments) iPracticalAssignmentsBL.getFromPK(pk);
         }
         catch (DataException e){
             ErrorProcessing("Ошибка при чтении практического задания по ключу", e, model);
@@ -57,7 +64,7 @@ public class PracticalController {
         }
         model.setViewName("editsubject");
 
-        Integer idSubject = practicalBL.getIdSubject(subjectid);
+        Integer idSubject = (Integer) iPracticalAssignmentsBL.getId(subjectid);
         if(idSubject != null)
             model.addObject("subjectid", idSubject);
 
@@ -72,7 +79,7 @@ public class PracticalController {
                     break;
                 case "delete":
                     try {
-                        practicalBL.delete(practical);
+                        iPracticalAssignmentsBL.delete(practical);
                     }
                     catch (DataException e){
                         ErrorProcessing("Ошибка при удалении практического задания", e, model);
@@ -84,7 +91,7 @@ public class PracticalController {
             }
         }
         try {
-            List<PracticalAssignments> practicals= practicalBL.getAll();
+            List<PracticalAssignments> practicals= iPracticalAssignmentsBL.getAll();
             model.addObject("Practicals", practicals);
         }
         catch (DataException e){
@@ -107,16 +114,8 @@ public class PracticalController {
                                        @RequestParam(value = "pk", required = false) String pk,
                                        @RequestParam(value = "subjectid", required = false) String subjectid) {
         ModelAndView model = new ModelAndView();
-        PracticalAssignmentsBL practicalBL = null;
-        try {
-            practicalBL = new PracticalAssignmentsBL();
-        } catch (DataException e) {
-            ErrorProcessing("Ошибка при инициализации практического задания", e, model);
-            model.setViewName("error");
-            return model;
-        }
 
-        Integer idSubject = practicalBL.getIdSubject(subjectid);
+        Integer idSubject = (Integer) iPracticalAssignmentsBL.getId(subjectid);
         if(idSubject != null)
             model.addObject("subjectid", idSubject);
 
@@ -138,7 +137,7 @@ public class PracticalController {
             if (id == null || id.isEmpty()) {
                 practical = new PracticalAssignments(name, description, subject);
                 try {
-                    practicalBL.create(practical);
+                    iPracticalAssignmentsBL.create(practical);
                 }
                 catch (DataException e){
                     ErrorProcessing("Ошибка при создании практического задания", e, model);
@@ -149,7 +148,7 @@ public class PracticalController {
             } else {
                 practical = new PracticalAssignments(name, description, subject, Integer.parseInt(id));
                 try {
-                    practicalBL.update(practical);
+                    iPracticalAssignmentsBL.update(practical);
                 }
                 catch (DataException e){
                     ErrorProcessing("Ошибка при обновлении практического задания", e, model);

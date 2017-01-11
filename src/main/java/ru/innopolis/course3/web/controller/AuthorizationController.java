@@ -2,11 +2,15 @@ package ru.innopolis.course3.web.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import ru.innopolis.course3.bl.ISubjectBL;
+import ru.innopolis.course3.bl.IUserBL;
+import ru.innopolis.course3.bl.MD5;
 import ru.innopolis.course3.bl.UserBL;
 import ru.innopolis.course3.dao.DataException;
 import ru.innopolis.course3.pojo.Role;
@@ -27,6 +31,12 @@ import java.io.IOException;
 public class AuthorizationController {
     public static Logger logger = LoggerFactory.getLogger(AuthorizationController.class);
 
+    IUserBL userBL;
+    @Autowired
+    public AuthorizationController(IUserBL userbl) {
+        this.userBL = userbl;
+    }
+
     @RequestMapping(method =  {RequestMethod.GET})
     public String getAuthorization() {
         return "index";
@@ -42,21 +52,12 @@ public class AuthorizationController {
         ModelAndView model = new ModelAndView();
         model.setViewName("subject");
 
-        UserBL userBL = null;
-        try {
-            userBL = new UserBL();
-        } catch (DataException e) {
-            ErrorProcessing("Ошибка при чтении пользователя", e, model);
-            model.setViewName("error");
-            return model;
-        }
-
         if (req.getParameter("save") != null){
             String name = req.getParameter("user");
             String password = req.getParameter("password");
             String email = req.getParameter("email");
             String phone = req.getParameter("phone");
-            User user = new User(name,userBL.md5Apache(password,name),email,phone, Role.ROLE_USER);
+            User user = new User(name,new MD5().md5Apache(password,name),email,phone, Role.ROLE_USER);
             try {
                 user = userBL.create(user);
             }
@@ -81,7 +82,7 @@ public class AuthorizationController {
             String password = req.getParameter("password");
             Integer id = null;
             try {
-                id = userBL.getIdUser(name,userBL.md5Apache(password, name));
+                id = userBL.getIdUser(name,new MD5().md5Apache(password, name));
             }
             catch (DataException e){
                 ErrorProcessing("Ошибка при получении польвателя по логину и паролю", e, model);
