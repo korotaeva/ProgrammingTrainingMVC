@@ -1,6 +1,8 @@
 package ru.innopolis.course3.dao;
 
 
+import javax.naming.NamingException;
+
 /**
  * Фабрика объектов для работы с базой данных
  * */

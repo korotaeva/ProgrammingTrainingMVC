@@ -16,7 +16,7 @@ import java.util.List;
  * Реализациия класса практических заданий на ru.innopolis.course3.dao.mysql
  */
 //@Repository
-public class MySqlPracticalDao extends AbstractJDBCDao<PracticalAssignments,Integer> {
+public class MySqlPracticalDao extends AbstractJDBCDao<PracticalAssignments,Integer> implements IMySqlPracticalDao {
 
     private class PracticalById extends PracticalAssignments {
         public void setId(int id) {

@@ -17,7 +17,7 @@ import java.util.List;
  * Реализациия класса пользователей на ru.innopolis.course3.dao.mysql
  */
 //@Repository
-public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
+public class MySqlUserDao extends AbstractJDBCDao<User, Integer> implements IMySqlUserDao{
 
     private class UserById extends User {
         public void setId(int id) {

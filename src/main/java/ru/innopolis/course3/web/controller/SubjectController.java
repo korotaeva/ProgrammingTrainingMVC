@@ -65,7 +65,7 @@ public class SubjectController {
                 case "edit":
                     model.setViewName("editsubject");
                     model.addObject("subject", subject);
-                    try {
+                  /*  try {
                         if(subject != null){
                             List<PracticalAssignments> practicals= new PracticalAssignmentsBL().getAllByKey(subject.getId().toString(),"subject");
                             model.addObject("Practicals", practicals);
@@ -75,7 +75,7 @@ public class SubjectController {
                         ErrorProcessing("Ошибка при получении списка практичексих заданий", e, model);
                         model.setViewName("error");
                         return model;
-                    }
+                    }*/
                     break;
                 case "delete":
                     try {

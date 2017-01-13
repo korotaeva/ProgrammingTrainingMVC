@@ -16,7 +16,7 @@ import java.util.List;
  * Реализациия класса тем на ru.innopolis.course3.dao.mysql
  */
 //@Repository
-public class MySqlSubjectDao extends AbstractJDBCDao<Subject, Integer> {
+public class MySqlSubjectDao extends AbstractJDBCDao<Subject, Integer> implements IMySqlSubjectDao {
 
 
 

@@ -8,6 +8,5 @@ import ru.innopolis.course3.pojo.PracticalAssignments;
 /**
  * Created by korot on 12.01.2017.
  */
-public interface IMySqlPracticalDao//extends UniversalDao<PracticalAssignments, Integer>
-         {
+public interface IMySqlPracticalDao extends UniversalDao<PracticalAssignments, Integer>{
 }

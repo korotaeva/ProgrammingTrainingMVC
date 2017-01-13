@@ -22,12 +22,14 @@ public class PracticalAssignmentsBL implements IPracticalAssignmentsBL {
     Connection connection;
     UniversalDao practicalDao;
 
+
     public PracticalAssignmentsBL() throws DataException {
         factory = new MySqlDaoFactory();
         connection = (Connection) factory.getContext();
         practicalDao = factory.getDao(connection, PracticalAssignments.class);
 
     }
+
 
     @Override
     public List<PracticalAssignments> getAll() throws DataException {

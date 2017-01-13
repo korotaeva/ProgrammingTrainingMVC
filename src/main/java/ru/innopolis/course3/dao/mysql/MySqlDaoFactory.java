@@ -8,6 +8,10 @@ import ru.innopolis.course3.dao.DaoFactory;
 import ru.innopolis.course3.dao.DataException;
 import ru.innopolis.course3.dao.UniversalDao;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -19,10 +23,11 @@ import java.util.Map;
  */
 public class MySqlDaoFactory implements DaoFactory<Connection> {
 
-    private String user = "root";//Логин пользователя
-    private String password = "123498765";//Пароль пользователя
-    private String url = "jdbc:mysql://localhost:3306/programming_training";//URL адрес
-    private String driver = "com.mysql.jdbc.Driver";//Имя драйвера
+//    private String user = "root";//Логин пользователя
+//    private String password = "123498765";//Пароль пользователя
+//    private String url = "jdbc:mysql://localhost:3306/programming_training";//URL адрес
+//    private String driver = "com.mysql.jdbc.Driver";//Имя драйвера
+
 
 
     private Map<Class, DaoCreator> creators;
@@ -30,8 +35,13 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
     public Connection getContext() throws DataException {
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(url, user, password);
-        } catch (SQLException e) {
+//            connection = DriverManager.getConnection(url, user, password);
+            InitialContext initialContext = new InitialContext();
+            Context environmentContext = (Context) initialContext.lookup("java:/comp/env");
+            String storageType = (String) environmentContext.lookup("storageType");
+            DataSource ds = (DataSource) initialContext.lookup(storageType);
+            connection = ds.getConnection();
+        } catch (SQLException|NamingException e) {
             throw new DataException(e);
         }
         return  connection;
@@ -46,12 +56,15 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
         return creator.create(connection);
     }
 
+
+
     public MySqlDaoFactory() {
-        try {
-            Class.forName(driver);//Регистрируем драйвер
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+
+//        try {
+//            Class.forName(driver);//Регистрируем драйвер
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
 
         creators = new HashMap<Class, DaoCreator>();
         creators.put(User.class, new DaoCreator<Connection>() {
