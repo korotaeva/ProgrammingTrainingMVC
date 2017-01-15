@@ -48,9 +48,9 @@ public class PracticalController {
         model.setViewName("practical");
 
 
-        PracticalAssignments practical = null;
+        PracticalAssignments practical ;
         try {
-            practical = (PracticalAssignments) iPracticalAssignmentsBL.getFromPK(pk);
+            practical = iPracticalAssignmentsBL.getFromPK(pk);
         }
         catch (DataException e){
             ErrorProcessing("Ошибка при чтении практического задания по ключу", e, model);
@@ -64,7 +64,7 @@ public class PracticalController {
         }
         model.setViewName("editsubject");
 
-        Integer idSubject = (Integer) iPracticalAssignmentsBL.getId(subjectid);
+        Integer idSubject = iPracticalAssignmentsBL.getId(subjectid);
         if(idSubject != null)
             model.addObject("subjectid", idSubject);
 
@@ -110,12 +110,12 @@ public class PracticalController {
 
 
     @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView getSubjectSave(HttpServletRequest req, @RequestParam(value = "operation", required = false) String operation,
-                                       @RequestParam(value = "pk", required = false) String pk,
-                                       @RequestParam(value = "subjectid", required = false) String subjectid) {
+    public ModelAndView getSubjectSave(HttpServletRequest req, @RequestParam(value = "operation", required = false) String operation) {
         ModelAndView model = new ModelAndView();
 
-        Integer idSubject = (Integer) iPracticalAssignmentsBL.getId(subjectid);
+        String subjectid = req.getParameter("subjectid");
+
+        Integer idSubject = iPracticalAssignmentsBL.getId(subjectid);
         if(idSubject != null)
             model.addObject("subjectid", idSubject);
 
@@ -123,7 +123,8 @@ public class PracticalController {
             String name = req.getParameter("name");
             String description = req.getParameter("description");
             String id = req.getParameter("id");
-            Subject subject = null;
+
+            Subject subject;
             try {
                 subject = (new SubjectBL()).getByPK(idSubject);
             }

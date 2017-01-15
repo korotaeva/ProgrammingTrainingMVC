@@ -12,6 +12,9 @@
     <title>Форма регистрации посетителей</title>
 
 </head>
+<style type="text/css">
+    <%@include file="/WEB-INF/jsp/css/registration.css"%>
+</style>
 <body>
 <h1>Регистрация посетителей</h1>
 <form onsubmit="return checkForm(this)" action="${pageContext.servletContext.contextPath}/authorization" method="post">
@@ -19,11 +22,24 @@
     <p id='err_user' style="color: red;"  class='error'></p>
     Пароль: <input type="password" name="password" id="password" size="10"><br>
     <p id='err_password' style="color: red;"  class='error'></p>
+
+    <div id="pswd_info">
+        <h4>Пароль должен соответствовать критериям:</h4>
+        <ul>
+            <li id="letter">Минимум <strong>одна буква</strong></li>
+            <li id="capital">Минимум <strong>одна заглавная буква</strong></li>
+            <li id="number">Минимум <strong>одна цифра</strong></li>
+            <li id="length">Быть не менее <strong>8 символов</strong></li>
+        </ul>
+    </div>
+
     Email: <input type="text" name="email" id="email"><br>
     <p id='err_email' style="color: red;"  class='error'></p>
     Телефон: +7<input type="text" name="phone" id="phone"><br>
     <p id='err_phone' style="color: red;"  class='error'></p>
     <p>
+        <input type="hidden" name="${_csrf.parameterName}"
+               value="${_csrf.token}" />
     <table>
         <tr>
             <th><small>
@@ -37,6 +53,10 @@
 <script >
     <%@include file="/WEB-INF/jsp/js/jquery-1.8.2.min.js"%>
 </script >
+<script >
+    <%@include file="/WEB-INF/jsp/js/jquerypasswordscript.js"%>
+</script >
+
 <script type="text/javascript">
     function clearVal(val, limit){
         var newVal = val.replace(/[^\d]+/g, '');
@@ -92,7 +112,12 @@
             document.getElementById('err_password').innerHTML='Введите пароль';
             error = true;
         } else{
-            document.getElementById('err_password').innerHTML="";
+            var pswd = document.getElementById('password').value;
+            if(!(pswd.length >= 8 && pswd.match(/[A-z]/) && pswd.match(/[A-Z]/)&& pswd.match(/[0-9]/))){
+                document.getElementById('err_password').innerHTML='Легкий пароль';
+                error = true;
+            }
+            else document.getElementById('err_password').innerHTML="";
         };
         if (document.getElementById('email').value=="") {
             document.getElementById('err_email').innerHTML='Введите email';

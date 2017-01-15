@@ -9,7 +9,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Форма входа в систему</title>
+  <title>Меню</title>
   <style type="text/css">
     .auth{
       width: 250px;
@@ -33,8 +33,8 @@
 </head>
 <body>
 <br>
-
-
+<a  valign="top" href="${pageContext.servletContext.contextPath}/login">Авторизоваться</a>
+<%--
   <div class="parent">
   <div class="auth">
     <h1>Вход в систему</h1>
@@ -54,7 +54,7 @@
     </form>
     </div>
   </div>
-
+--%>
 <br>
 </body>
 </html>

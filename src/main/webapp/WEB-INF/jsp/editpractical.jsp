@@ -8,6 +8,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -28,15 +29,22 @@
 </script>
 
 <body>
-<a  valign="top" href="${pageContext.servletContext.contextPath}/logout">Выйти</a>
+<sec:authorize access="!isAuthenticated()">
+    <p><a class="btn btn-lg btn-success" href="<c:url value="/login" />" role="button">Войти</a></p>
+</sec:authorize>
+<sec:authorize access="isAuthenticated()">
+    <p>Ваш логин: <sec:authentication property="principal.username" /></p>
+    <p><a class="btn btn-lg btn-danger" href="<c:url value="/logout" />" role="button">Выйти</a></p>
 
+</sec:authorize>
 <h1>Практическое задание</h1>
 
 
 <form method="post"
-      action="${pageContext.request.contextPath}/practical?operation=save&pk=${practical.id}&subjectid=${subjectid}">
+      action="${pageContext.request.contextPath}/practical?operation=save">
     <fieldset>
-        <legend>
+        <sec:authorize access="hasRole('ROLE_ADMIN')">
+            <legend>
             <c:choose>
                 <c:when test="${not empty practical.id }">
                     Обновить задание
@@ -46,30 +54,33 @@
                 </c:otherwise>
             </c:choose>
         </legend>
-
+        </sec:authorize>
         <div>
-            <label for="name">Тема</label> <input type="text" name="name"
-                                                  id="name"  value="${practical.name}" />
+            <label for="name">Тема</label> <sec:authorize access="hasRole('ROLE_ADMIN')"><input type="text" name="name"
+                                                  id="name"  value="${practical.name}" /></sec:authorize>
+            <sec:authorize access="hasRole('ROLE_USER')"><h3>${practical.name}</h3> </sec:authorize>
         </div>
 
         <div  valign="top">
             <label for="description">Описание</label>
-            <textarea name="description" id="description" rows="60" cols="60">${practical.description}</textarea>
+            <sec:authorize access="hasRole('ROLE_ADMIN')"><textarea name="description" id="description" rows="60" cols="60"> </sec:authorize>${practical.description} <sec:authorize access="hasRole('ROLE_ADMIN')"></textarea></sec:authorize>
         </div>
-
-
 
         <c:if test="${not empty practical.id}">
             <input type="hidden" name="id" value="${practical.id}" />
-
-            <input type="hidden" name="id" value="${subjectid}" />
+        </c:if>
+        <c:if test="${not empty subjectid}">
+            <input type="hidden" name="subjectid" value="${subjectid}" />
         </c:if>
 
+        <input type="hidden" name="${_csrf.parameterName}"
+               value="${_csrf.token}" />
     </fieldset>
 
 
     <div class="button-row">
-        <a href="${pageContext.request.contextPath}/subject?operation=edit&pk=${subjectid}">Отмена</a> or <input type="submit" value="Сохранить" />
+        <a href="${pageContext.request.contextPath}/subject?operation=edit&pk=${subjectid}">Отмена</a>
+        <sec:authorize access="hasRole('ROLE_ADMIN')">or <input type="submit" value="Сохранить" /> </sec:authorize>
     </div>
 </form>
 

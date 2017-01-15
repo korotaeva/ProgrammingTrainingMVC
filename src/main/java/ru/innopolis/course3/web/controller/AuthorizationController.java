@@ -3,6 +3,7 @@ package ru.innopolis.course3.web.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,20 +27,17 @@ import java.io.IOException;
 /**
  * Created by korot on 04.01.2017.
  */
-@RequestMapping(value = { "/", "/authorization" })
+@RequestMapping(value ="/authorization")
 @Controller
 public class AuthorizationController {
     public static Logger logger = LoggerFactory.getLogger(AuthorizationController.class);
 
+    private BCryptPasswordEncoder bcryptEncoder;
     IUserBL userBL;
     @Autowired
-    public AuthorizationController(IUserBL userbl) {
+    public AuthorizationController(IUserBL userbl, BCryptPasswordEncoder bcryptEncoder) {
         this.userBL = userbl;
-    }
-
-    @RequestMapping(method =  {RequestMethod.GET})
-    public String getAuthorization() {
-        return "index";
+        this.bcryptEncoder = bcryptEncoder;
     }
 
     private void ErrorProcessing(String errorStr, Exception e, ModelAndView model){
@@ -57,7 +55,8 @@ public class AuthorizationController {
             String password = req.getParameter("password");
             String email = req.getParameter("email");
             String phone = req.getParameter("phone");
-            User user = new User(name,new MD5().md5Apache(password,name),email,phone, Role.ROLE_USER);
+           // User user = new User(name,new MD5().md5Apache(password,name),email,phone, Role.ROLE_USER);
+            User user = new User(name, bcryptEncoder.encode(password), email,phone, Role.ROLE_USER);
             try {
                 user = userBL.create(user);
             }
@@ -68,38 +67,26 @@ public class AuthorizationController {
             }
             model.addObject("user", user);
 
-            if (user != null){
-                HttpSession httpSession = req.getSession();
-                httpSession.setAttribute("id", user.getId());
-            }
+
             model.setViewName("redirect:/subject");
 
         } else if (req.getParameter("cancel") != null){
-            model.setViewName("index");
-        }
-        else if (req.getParameter("login") != null){
+            model.setViewName("login");
+        } else if (req.getParameter("login") != null){
             String name = req.getParameter("user");
             String password = req.getParameter("password");
             Integer id = null;
             try {
-                id = userBL.getIdUser(name,new MD5().md5Apache(password, name));
+                id = userBL.getIdUser(name,bcryptEncoder.encode(password));
             }
             catch (DataException e){
                 ErrorProcessing("Ошибка при получении польвателя по логину и паролю", e, model);
                 model.setViewName("error");
                 return model;
             }
-
-            if (id != null){
-                HttpSession httpSession = req.getSession();
-                httpSession.setAttribute("id", id);
-            }
-            else {
-                model.setViewName("index");
-            }
             model.setViewName("redirect:/subject");
-
-        } else if (req.getParameter("registration") != null) {
+        }
+        else if (req.getParameter("registration") != null) {
             model.setViewName("registration");
         }
         return model;

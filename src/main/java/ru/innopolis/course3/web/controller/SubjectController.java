@@ -26,10 +26,12 @@ import java.util.List;
 public class SubjectController {
 
     ISubjectBL subjectBL;
+    IPracticalAssignmentsBL practicalAssignmentsBL;
 
     @Autowired
-    public SubjectController(ISubjectBL subjectbl) {
+    public SubjectController(ISubjectBL subjectbl, IPracticalAssignmentsBL practicalAssignmentsBL) {
         this.subjectBL = subjectbl;
+        this.practicalAssignmentsBL = practicalAssignmentsBL;
     }
 
     public static Logger logger = LoggerFactory.getLogger(SubjectController.class);
@@ -41,9 +43,9 @@ public class SubjectController {
         ModelAndView model = new ModelAndView();
         model.setViewName("subject");
 
-        Subject subject = null;
+        Subject subject;
         try {
-            subject = (Subject)subjectBL.getFromPK(pk);
+            subject = subjectBL.getFromPK(pk);
         }
         catch (DataException e){
             ErrorProcessing("Ошибка при чтении по ключу", e, model);
@@ -65,9 +67,9 @@ public class SubjectController {
                 case "edit":
                     model.setViewName("editsubject");
                     model.addObject("subject", subject);
-                  /*  try {
+                    try {
                         if(subject != null){
-                            List<PracticalAssignments> practicals= new PracticalAssignmentsBL().getAllByKey(subject.getId().toString(),"subject");
+                            List<PracticalAssignments> practicals= practicalAssignmentsBL.getAllByKey(subject.getId().toString(),"subject");
                             model.addObject("Practicals", practicals);
                         }
                     }
@@ -75,7 +77,7 @@ public class SubjectController {
                         ErrorProcessing("Ошибка при получении списка практичексих заданий", e, model);
                         model.setViewName("error");
                         return model;
-                    }*/
+                    }
                     break;
                 case "delete":
                     try {

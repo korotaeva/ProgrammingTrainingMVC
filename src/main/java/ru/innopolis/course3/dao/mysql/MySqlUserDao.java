@@ -28,23 +28,23 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> implements IMyS
 
     @Override
     public String getSelectQuery() {
-        return "SELECT id, name, password, email, phone, role FROM programming_training.user";
+        return "SELECT id, username, password, email, phone, role FROM programming_training.users";
     }
 
     @Override
     public String getCreateQuery() {
-        return "INSERT INTO programming_training.user (name, password, email, phone, role) \n" +
+        return "INSERT INTO programming_training.users (username, password, email, phone, role) \n" +
                 "VALUES (?, ?, ?, ?, ?);";
     }
 
     @Override
     public String getUpdateQuery() {
-        return "UPDATE programming_training.user SET name= ? password = ? email = ? phone = ? role = ?  WHERE id= ?;";
+        return "UPDATE programming_training.users SET username= ? password = ? email = ? phone = ? role = ?  WHERE id= ?;";
     }
 
     @Override
     public String getDeleteQuery() {
-        return "DELETE FROM programming_training.user WHERE id= ?;";
+        return "DELETE FROM programming_training.users WHERE id= ?;";
     }
 
     @Override
@@ -65,7 +65,7 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> implements IMyS
             while (rs.next()) {
                 UserById user = new UserById();
                 user.setId(rs.getInt("id"));
-                user.setName(rs.getString("name"));
+                user.setName(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
                 user.setEmail(rs.getString("email"));
                 user.setPhone(rs.getString("phone"));
@@ -110,7 +110,7 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> implements IMyS
 
     public static Integer getUserId(String name, String password) throws DataException {
         Integer id = null;
-        String sql = "SELECT id FROM programming_training.user where name = ? and password = ?;";
+        String sql = "SELECT id FROM programming_training.users where username = ? and password = ?;";
         try (PreparedStatement statement = connections.prepareStatement(sql)) {
             statement.setString(1, name);
             statement.setString(2, password);

@@ -21,7 +21,7 @@ public class LogoutController {
         HttpSession session = request.getSession(false);
         session.invalidate();
         ModelAndView model = new ModelAndView();
-        model.setViewName("redirect:/subject");
+        model.setViewName("redirect:/login");
         return model;
     }
 }
