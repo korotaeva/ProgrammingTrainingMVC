@@ -1,15 +1,20 @@
 package ru.innopolis.course3.bl;
 
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.innopolis.course3.dao.IPracticalDao;
+import ru.innopolis.course3.hibernate.PracticalAssignmentsEntity;
 import ru.innopolis.course3.pojo.PracticalAssignments;
-import ru.innopolis.course3.dao.DaoFactory;
 import ru.innopolis.course3.dao.DataException;
-import ru.innopolis.course3.dao.UniversalDao;
-import ru.innopolis.course3.dao.mysql.*;
 
-import java.sql.Connection;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,47 +22,74 @@ import java.util.List;
  * Бизнес сервер для работы с практическими заданиями
  */
 @Service
+@Transactional
+@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class PracticalAssignmentsBL implements IPracticalAssignmentsBL {
-    DaoFactory factory;
-    Connection connection;
-    UniversalDao practicalDao;
 
+   MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
 
-    public PracticalAssignmentsBL() throws DataException {
-        factory = new MySqlDaoFactory();
-        connection = (Connection) factory.getContext();
-        practicalDao = factory.getDao(connection, PracticalAssignments.class);
+   MapperFacade mapper = mapperFactory.getMapperFacade();
+
+    private PracticalAssignments practicalAssignmentsFromEntity(PracticalAssignmentsEntity practicalAssignmentsEntity){
+
+        PracticalAssignments practicalAssignments = mapper.map(practicalAssignmentsEntity, PracticalAssignments.class);
+        return practicalAssignments;
+    }
+
+    private PracticalAssignmentsEntity practicalEntityfromPractical(PracticalAssignments practicalAssignments){
+        if(practicalAssignments == null)
+            return null;
+        PracticalAssignmentsEntity practicalAssignmentsEntity = mapper.map(practicalAssignments, PracticalAssignmentsEntity.class);
+        return practicalAssignmentsEntity;
+    }
+
+    private List<PracticalAssignments> practicalListfromEntity(Iterable<PracticalAssignmentsEntity> listEntity){
+        List<PracticalAssignments> list = new ArrayList<>();
+        for (PracticalAssignmentsEntity subjectEntity:listEntity) list.add(practicalAssignmentsFromEntity(subjectEntity));
+        return list;
+    }
+
+    private IPracticalDao practicalDao;
+
+    @Autowired
+    public PracticalAssignmentsBL(IPracticalDao dao) {
+        this.practicalDao = dao;
+        mapperFactory.classMap(PracticalAssignmentsEntity.class, PracticalAssignments.class)
+                .field("subject", "subject.id")
+                .byDefault()
+                .register();
 
     }
 
 
     @Override
     public List<PracticalAssignments> getAll() throws DataException {
-        List<PracticalAssignments> list = practicalDao.getAll();
+        List<PracticalAssignments> list = practicalListfromEntity(practicalDao.findAll());
         return list;
     }
 
     @Override
     public List<PracticalAssignments> getAllByKey(String key, String name) throws DataException {
-        List<PracticalAssignments> list =  (List<PracticalAssignments>) practicalDao.getByKey(key, name);
+        List<PracticalAssignments> list =  practicalListfromEntity(practicalDao.getByKey(key, name));
         return list;
     }
 
     @Override
     public PracticalAssignments getByPK(Integer id) throws DataException {
-        return (PracticalAssignments)practicalDao.getByPK(id);
+        return practicalAssignmentsFromEntity(practicalDao.findOne(id));
     }
     @Override
     public PracticalAssignments create(PracticalAssignments practicalAssignments) throws DataException {
-        return (PracticalAssignments)practicalDao.createByObject(practicalAssignments);
+        practicalDao.create(practicalEntityfromPractical(practicalAssignments));
+        return practicalAssignments;
     }
     @Override
-    public void delete(PracticalAssignments subject) throws DataException {
-        practicalDao.delete(subject);
+    public void delete(PracticalAssignments practicalAssignments) throws DataException {
+        practicalDao.delete(practicalEntityfromPractical(practicalAssignments));
     }
     @Override
-    public void update(PracticalAssignments subject) throws DataException {
-        practicalDao.update(subject);
+    public void update(PracticalAssignments practicalAssignments) throws DataException {
+        practicalDao.update(practicalEntityfromPractical(practicalAssignments));
     }
 
     @Override

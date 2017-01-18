@@ -1,13 +1,24 @@
 package ru.innopolis.course3.bl;
 
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
-import ru.innopolis.course3.pojo.User;
-import ru.innopolis.course3.dao.DaoFactory;
+import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.course3.dao.DataException;
-import ru.innopolis.course3.dao.UniversalDao;
-import ru.innopolis.course3.dao.mysql.*;
+import ru.innopolis.course3.dao.ISubjectDao;
+import ru.innopolis.course3.dao.IUserDao;
+import ru.innopolis.course3.hibernate.PracticalAssignmentsEntity;
+import ru.innopolis.course3.hibernate.SubjectEntity;
+import ru.innopolis.course3.hibernate.UsersEntity;
+import ru.innopolis.course3.pojo.PracticalAssignments;
+import ru.innopolis.course3.pojo.Subject;
+import ru.innopolis.course3.pojo.User;
 
-import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,56 +26,82 @@ import java.util.List;
  * Бизнес сервер для работы с пользователями
  */
 @Service
+@Transactional
+@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserBL  implements IUserBL{
 
-    DaoFactory factory;
-    Connection connection;
-    UniversalDao userDao;
 
-    public UserBL() throws DataException {
-        factory = new MySqlDaoFactory();
-        connection = (Connection) factory.getContext();
-        userDao = factory.getDao(connection, User.class);
+
+    private IUserDao userDao;
+
+    @Autowired
+    public UserBL(IUserDao dao) {
+        this.userDao = dao;
+        mapperFactory.classMap(UsersEntity.class, User.class)
+                .field("username", "name")
+                .byDefault()
+                .register();
+
     }
 
-    public UserBL(DaoFactory factory, Connection connection) {
-        this.factory = factory;
-        this.connection = connection;
+    MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+    MapperFacade mapper = mapperFactory.getMapperFacade();
+
+    private User userfromEntity(UsersEntity userEntity){
+        User user = mapper.map(userEntity, User.class);
+        return user;
     }
+
+    private UsersEntity userEntityfromUser(User user){
+        if(user == null)
+            return null;
+        UsersEntity userEntity = mapper.map(user, UsersEntity.class);
+        return userEntity;
+    }
+
+    private List<User> userListfromEntity(Iterable<UsersEntity> listEntity){
+        List<User> list = new ArrayList<>();
+        for (UsersEntity userEntity:listEntity) list.add(userfromEntity(userEntity));
+        return list;
+    }
+
+
+
     @Override
     public List<User> getAll() throws DataException {
-        List<User> list = userDao.getAll();
+        List<User> list = userListfromEntity(userDao.findAll());
         return list;
     }
 
     @Override
     public List<User> getAllByKey(String key, String name) throws DataException {
-        List<User> list =  (List<User>) userDao.getByKey(key, name);
+        List<User> list =  userListfromEntity(userDao.getByKey(key, name));
         return list;
     }
     @Override
     public User getByPK(Integer id) throws DataException {
-        return (User)userDao.getByPK(id);
+        return userfromEntity(userDao.findOne(id));
     }
 
     @Override
     public Integer getIdUser(String name, String password) throws DataException {
-        return MySqlUserDao.getUserId(name, password);
+        return null;// userDao.getUserId(name, password);
     }
 
     @Override
     public User create(User user) throws DataException {
-        return (User)userDao.createByObject(user);
+        userDao.create(userEntityfromUser(user));
+        return user;
     }
 
     @Override
     public void delete(User object) throws DataException {
-        userDao.delete(object);
+        userDao.delete(userEntityfromUser(object));
     }
 
     @Override
     public void update(User object) throws DataException {
-        userDao.update(object);
+        userDao.update(userEntityfromUser(object));
     }
 
     @Override

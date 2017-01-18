@@ -2,7 +2,6 @@ package ru.innopolis.course3.bl;
 
 import ru.innopolis.course3.dao.DataException;
 import ru.innopolis.course3.dao.Identified;
-import ru.innopolis.course3.pojo.PracticalAssignments;
 
 import java.io.Serializable;
 import java.util.List;

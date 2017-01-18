@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <Context>
-    <Environment name="storageType" value="java:comp/env/jdbc/local" type="java.lang.String"/>
-    <Resource name="jdbc/local" auth="Container"
-              maxActive="100"
-              type="javax.sql.DataSource"
-              maxIdle="30" maxWait="10000"
-              username="root"
-              password="123498765"
-              driverClassName="com.mysql.jdbc.Driver"
-              url="jdbc:mysql://localhost:3306/programming_training"/>
+<Environment name="storageType" value="java:comp/env/jdbc/local" type="java.lang.String"/>
+<Resource name="jdbc/local" auth="Container"
+          maxActive="100"
+          type="javax.sql.DataSource"
+          maxIdle="30" maxWait="10000"
+          username="root"
+          password="123498765"
+          driverClassName="com.mysql.jdbc.Driver"
+          url="jdbc:mysql://localhost:3306/programming_training"/>
 </Context>

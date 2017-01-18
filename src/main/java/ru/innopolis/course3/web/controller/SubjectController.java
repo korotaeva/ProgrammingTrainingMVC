@@ -4,16 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import ru.innopolis.course3.bl.*;
+import ru.innopolis.course3.bl.IPracticalAssignmentsBL;
 import ru.innopolis.course3.pojo.PracticalAssignments;
 import ru.innopolis.course3.pojo.Subject;
 import ru.innopolis.course3.dao.DataException;
+import ru.innopolis.course3.bl.ISubjectBL;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -28,11 +27,11 @@ public class SubjectController {
     ISubjectBL subjectBL;
     IPracticalAssignmentsBL practicalAssignmentsBL;
 
-    @Autowired
-    public SubjectController(ISubjectBL subjectbl, IPracticalAssignmentsBL practicalAssignmentsBL) {
-        this.subjectBL = subjectbl;
-        this.practicalAssignmentsBL = practicalAssignmentsBL;
-    }
+     @Autowired
+     public SubjectController(ISubjectBL subjectbl, IPracticalAssignmentsBL practicalAssignmentsBL) {
+         this.subjectBL = subjectbl;
+         this.practicalAssignmentsBL = practicalAssignmentsBL;
+     }
 
     public static Logger logger = LoggerFactory.getLogger(SubjectController.class);
 

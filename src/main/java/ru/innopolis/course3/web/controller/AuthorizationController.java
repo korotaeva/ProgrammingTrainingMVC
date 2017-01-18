@@ -7,22 +7,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import ru.innopolis.course3.bl.ISubjectBL;
 import ru.innopolis.course3.bl.IUserBL;
-import ru.innopolis.course3.bl.MD5;
-import ru.innopolis.course3.bl.UserBL;
 import ru.innopolis.course3.dao.DataException;
 import ru.innopolis.course3.pojo.Role;
 import ru.innopolis.course3.pojo.User;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 /**
  * Created by korot on 04.01.2017.
@@ -33,10 +24,12 @@ public class AuthorizationController {
     public static Logger logger = LoggerFactory.getLogger(AuthorizationController.class);
 
     private BCryptPasswordEncoder bcryptEncoder;
+
     IUserBL userBL;
+
     @Autowired
-    public AuthorizationController(IUserBL userbl, BCryptPasswordEncoder bcryptEncoder) {
-        this.userBL = userbl;
+    public AuthorizationController(IUserBL userBL, BCryptPasswordEncoder bcryptEncoder) {
+        this.userBL = userBL;
         this.bcryptEncoder = bcryptEncoder;
     }
 
@@ -55,7 +48,7 @@ public class AuthorizationController {
             String password = req.getParameter("password");
             String email = req.getParameter("email");
             String phone = req.getParameter("phone");
-           // User user = new User(name,new MD5().md5Apache(password,name),email,phone, Role.ROLE_USER);
+
             User user = new User(name, bcryptEncoder.encode(password), email,phone, Role.ROLE_USER);
             try {
                 user = userBL.create(user);
@@ -67,13 +60,12 @@ public class AuthorizationController {
             }
             model.addObject("user", user);
 
-
             model.setViewName("redirect:/subject");
 
         } else if (req.getParameter("cancel") != null){
-            model.setViewName("login");
+            model.setViewName("redirect:/login");
         } else if (req.getParameter("login") != null){
-            String name = req.getParameter("user");
+        /*    String name = req.getParameter("user");
             String password = req.getParameter("password");
             Integer id = null;
             try {
@@ -83,7 +75,7 @@ public class AuthorizationController {
                 ErrorProcessing("Ошибка при получении польвателя по логину и паролю", e, model);
                 model.setViewName("error");
                 return model;
-            }
+            }*/
             model.setViewName("redirect:/subject");
         }
         else if (req.getParameter("registration") != null) {

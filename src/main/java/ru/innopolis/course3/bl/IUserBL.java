@@ -1,7 +1,6 @@
 package ru.innopolis.course3.bl;
 
 import ru.innopolis.course3.dao.DataException;
-import ru.innopolis.course3.dao.mysql.MySqlUserDao;
 import ru.innopolis.course3.pojo.User;
 
 /**

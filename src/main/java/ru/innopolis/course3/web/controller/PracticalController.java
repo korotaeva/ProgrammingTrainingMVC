@@ -3,21 +3,16 @@ package ru.innopolis.course3.web.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import ru.innopolis.course3.bl.BService;
-import ru.innopolis.course3.bl.IPracticalAssignmentsBL;
-import ru.innopolis.course3.bl.PracticalAssignmentsBL;
-import ru.innopolis.course3.bl.SubjectBL;
 import ru.innopolis.course3.dao.DataException;
 import ru.innopolis.course3.pojo.PracticalAssignments;
 import ru.innopolis.course3.pojo.Subject;
+import ru.innopolis.course3.bl.IPracticalAssignmentsBL;
+import ru.innopolis.course3.bl.ISubjectBL;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -30,15 +25,16 @@ import java.util.List;
 public class PracticalController {
 
     IPracticalAssignmentsBL iPracticalAssignmentsBL;
+    ISubjectBL subjectBL;
 
     public static Logger logger = LoggerFactory.getLogger(SubjectController.class);
 
 
     @Autowired
-    public PracticalController(IPracticalAssignmentsBL practicalAssignmentsBL) {
+    public PracticalController(IPracticalAssignmentsBL practicalAssignmentsBL,ISubjectBL subjectbl) {
         this.iPracticalAssignmentsBL = practicalAssignmentsBL;
+        this.subjectBL = subjectbl;
     }
-
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView getSubject(@RequestParam(value = "operation", required = false) String operation,
@@ -126,7 +122,7 @@ public class PracticalController {
 
             Subject subject;
             try {
-                subject = (new SubjectBL()).getByPK(idSubject);
+                subject = subjectBL.getByPK(idSubject);
             }
             catch (DataException e){
                 ErrorProcessing("Не найдена тема с данным ключом", e, model);
