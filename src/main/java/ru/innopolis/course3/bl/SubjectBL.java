@@ -26,12 +26,7 @@ import java.util.List;
 @Scope(proxyMode = ScopedProxyMode.INTERFACES)
 @EnableJpaRepositories("ru.innopolis.course3.dao")
 public class SubjectBL implements ISubjectBL {
-   /* private ISubjectDao dao;
 
-    @Autowired
-    public SubjectBL(ISubjectDao dao) {
-        this.dao = dao;
-    }*/
 
     private SubjectEntityRepository dao;
 

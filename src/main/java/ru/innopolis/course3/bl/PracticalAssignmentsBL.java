@@ -9,7 +9,6 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.innopolis.course3.dao.IPracticalDao;
 import ru.innopolis.course3.dao.PracticaRepository;
 import ru.innopolis.course3.hibernate.PracticalAssignmentsEntity;
 import ru.innopolis.course3.pojo.PracticalAssignments;
@@ -52,18 +51,7 @@ public class PracticalAssignmentsBL implements IPracticalAssignmentsBL {
         return list;
     }
 
-   // private IPracticalDao practicalDao;
 
-    /*@Autowired
-    public PracticalAssignmentsBL(IPracticalDao dao) {
-        this.practicalDao = dao;
-        mapperFactory.classMap(PracticalAssignmentsEntity.class, PracticalAssignments.class)
-                .field("subject", "subject.id")
-                .byDefault()
-                .register();
-
-    }
-*/
 
     private PracticaRepository practicalDao;
 

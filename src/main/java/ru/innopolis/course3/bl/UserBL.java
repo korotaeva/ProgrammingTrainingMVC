@@ -31,19 +31,6 @@ import java.util.List;
 public class UserBL  implements IUserBL{
 
 
-
-   /* private IUserDao userDao;
-
-    @Autowired
-    public UserBL(IUserDao dao) {
-        this.userDao = dao;
-        mapperFactory.classMap(UsersEntity.class, User.class)
-                .field("username", "name")
-                .byDefault()
-                .register();
-
-    }*/
-
     private UserRepository userDao;
 
     @Autowired
