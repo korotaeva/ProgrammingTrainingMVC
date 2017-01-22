@@ -6,11 +6,10 @@ import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.innopolis.course3.dao.DataException;
-import ru.innopolis.course3.dao.ISubjectDao;
-import ru.innopolis.course3.dao.IUserDao;
+import ru.innopolis.course3.dao.*;
 import ru.innopolis.course3.hibernate.PracticalAssignmentsEntity;
 import ru.innopolis.course3.hibernate.SubjectEntity;
 import ru.innopolis.course3.hibernate.UsersEntity;
@@ -28,11 +27,12 @@ import java.util.List;
 @Service
 @Transactional
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
+@EnableJpaRepositories("ru.innopolis.course3.dao")
 public class UserBL  implements IUserBL{
 
 
 
-    private IUserDao userDao;
+   /* private IUserDao userDao;
 
     @Autowired
     public UserBL(IUserDao dao) {
@@ -42,6 +42,17 @@ public class UserBL  implements IUserBL{
                 .byDefault()
                 .register();
 
+    }*/
+
+    private UserRepository userDao;
+
+    @Autowired
+    public UserBL(UserRepository dao) {
+        this.userDao = dao;
+        mapperFactory.classMap(UsersEntity.class, User.class)
+                .field("username", "name")
+                .byDefault()
+                .register();
     }
 
     MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
@@ -75,8 +86,9 @@ public class UserBL  implements IUserBL{
 
     @Override
     public List<User> getAllByKey(String key, String name) throws DataException {
-        List<User> list =  userListfromEntity(userDao.getByKey(key, name));
-        return list;
+     /*   List<User> list =  userListfromEntity(userDao.getByKey(key, name));
+        return list;*/
+     return null;
     }
     @Override
     public User getByPK(Integer id) throws DataException {
@@ -90,7 +102,7 @@ public class UserBL  implements IUserBL{
 
     @Override
     public User create(User user) throws DataException {
-        userDao.create(userEntityfromUser(user));
+        userDao.save(userEntityfromUser(user));
         return user;
     }
 
@@ -101,7 +113,7 @@ public class UserBL  implements IUserBL{
 
     @Override
     public void update(User object) throws DataException {
-        userDao.update(userEntityfromUser(object));
+        userDao.save(userEntityfromUser(object));
     }
 
     @Override

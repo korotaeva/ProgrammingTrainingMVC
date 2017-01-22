@@ -68,6 +68,7 @@ public class SubjectController {
                     model.addObject("subject", subject);
                     try {
                         if(subject != null){
+                            //List<PracticalAssignments> practicals = subjectBL.getPracticalAssignments() ;
                             List<PracticalAssignments> practicals= practicalAssignmentsBL.getAllByKey(subject.getId().toString(),"subject");
                             model.addObject("Practicals", practicals);
                         }

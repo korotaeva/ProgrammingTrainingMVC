@@ -6,9 +6,11 @@ import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.innopolis.course3.dao.IPracticalDao;
+import ru.innopolis.course3.dao.PracticaRepository;
 import ru.innopolis.course3.hibernate.PracticalAssignmentsEntity;
 import ru.innopolis.course3.pojo.PracticalAssignments;
 import ru.innopolis.course3.dao.DataException;
@@ -24,6 +26,7 @@ import java.util.List;
 @Service
 @Transactional
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
+@EnableJpaRepositories("ru.innopolis.course3.dao")
 public class PracticalAssignmentsBL implements IPracticalAssignmentsBL {
 
    MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
@@ -49,9 +52,9 @@ public class PracticalAssignmentsBL implements IPracticalAssignmentsBL {
         return list;
     }
 
-    private IPracticalDao practicalDao;
+   // private IPracticalDao practicalDao;
 
-    @Autowired
+    /*@Autowired
     public PracticalAssignmentsBL(IPracticalDao dao) {
         this.practicalDao = dao;
         mapperFactory.classMap(PracticalAssignmentsEntity.class, PracticalAssignments.class)
@@ -60,7 +63,18 @@ public class PracticalAssignmentsBL implements IPracticalAssignmentsBL {
                 .register();
 
     }
+*/
 
+    private PracticaRepository practicalDao;
+
+    @Autowired
+    public PracticalAssignmentsBL(PracticaRepository dao) {
+        this.practicalDao = dao;
+        mapperFactory.classMap(PracticalAssignmentsEntity.class, PracticalAssignments.class)
+                .field("subject", "subject.id")
+                .byDefault()
+                .register();
+    }
 
     @Override
     public List<PracticalAssignments> getAll() throws DataException {
@@ -70,7 +84,7 @@ public class PracticalAssignmentsBL implements IPracticalAssignmentsBL {
 
     @Override
     public List<PracticalAssignments> getAllByKey(String key, String name) throws DataException {
-        List<PracticalAssignments> list =  practicalListfromEntity(practicalDao.getByKey(key, name));
+        List<PracticalAssignments> list =  practicalListfromEntity(practicalDao.findBySubject(Integer.parseInt(key)));
         return list;
     }
 
@@ -80,7 +94,7 @@ public class PracticalAssignmentsBL implements IPracticalAssignmentsBL {
     }
     @Override
     public PracticalAssignments create(PracticalAssignments practicalAssignments) throws DataException {
-        practicalDao.create(practicalEntityfromPractical(practicalAssignments));
+        practicalDao.save(practicalEntityfromPractical(practicalAssignments));
         return practicalAssignments;
     }
     @Override
@@ -89,7 +103,7 @@ public class PracticalAssignmentsBL implements IPracticalAssignmentsBL {
     }
     @Override
     public void update(PracticalAssignments practicalAssignments) throws DataException {
-        practicalDao.update(practicalEntityfromPractical(practicalAssignments));
+        practicalDao.save(practicalEntityfromPractical(practicalAssignments));
     }
 
     @Override

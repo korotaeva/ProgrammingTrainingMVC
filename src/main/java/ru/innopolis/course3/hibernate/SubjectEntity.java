@@ -3,6 +3,8 @@ package ru.innopolis.course3.hibernate;
 import javax.persistence.*;
 import javax.security.auth.Subject;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by korot on 16.01.2017.
@@ -44,6 +46,18 @@ public class SubjectEntity implements Serializable {
         this.description = description;
     }
 
+
+    /*public List<PracticalAssignmentsEntity> getPracticalAssignments() {
+        return practicalAssignments;
+    }
+
+    public void setPracticalAssignments(List<PracticalAssignmentsEntity> practicalAssignments) {
+        this.practicalAssignments = practicalAssignments;
+    }
+
+    @OneToMany
+    private List<PracticalAssignmentsEntity> practicalAssignments;
+*/
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

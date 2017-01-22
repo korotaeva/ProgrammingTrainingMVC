@@ -6,9 +6,10 @@ import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.innopolis.course3.dao.ISubjectDao;
+import ru.innopolis.course3.dao.SubjectEntityRepository;
 import ru.innopolis.course3.hibernate.SubjectEntity;
 import ru.innopolis.course3.pojo.Subject;
 import ru.innopolis.course3.dao.DataException;
@@ -21,20 +22,30 @@ import java.util.List;
  * Бизнес сервер для работы с темами
  */
 @Service
-@Transactional
+//@Transactional
 @Scope(proxyMode = ScopedProxyMode.INTERFACES)
+@EnableJpaRepositories("ru.innopolis.course3.dao")
 public class SubjectBL implements ISubjectBL {
-    private ISubjectDao dao;
+   /* private ISubjectDao dao;
 
     @Autowired
     public SubjectBL(ISubjectDao dao) {
         this.dao = dao;
+    }*/
+
+    private SubjectEntityRepository dao;
+
+    @Autowired
+    public SubjectBL(SubjectEntityRepository dao) {
+        this.dao = dao;
     }
+
 
     MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
     MapperFacade mapper = mapperFactory.getMapperFacade();
 
     private Subject subjectfromEntity(SubjectEntity subjectEntity){
+
         Subject subject = mapper.map(subjectEntity, Subject.class);
         return subject;
     }
@@ -60,13 +71,14 @@ public class SubjectBL implements ISubjectBL {
 
     @Override
     public List<Subject> getAllByKey(String key, String name) throws DataException {
-        Iterable<SubjectEntity> listEntity =  dao.getByKey(key, name);
-        return subjectListfromEntity(listEntity);
+        /*Iterable<SubjectEntity> listEntity =  dao.getByKey(key, name);
+        return subjectListfromEntity(listEntity);*/
+        return null;
     }
 
     @Override
     public Subject create(Subject subject) throws DataException {
-        dao.create(subjectEntityfromSubject(subject));
+        dao.save(subjectEntityfromSubject(subject));
         return subject;
     }
 
@@ -77,7 +89,7 @@ public class SubjectBL implements ISubjectBL {
 
     @Override
     public void update(Subject subject) throws DataException {
-        dao.update(subjectEntityfromSubject(subject));
+        dao.save(subjectEntityfromSubject(subject));
     }
 
     @Override
@@ -101,4 +113,10 @@ public class SubjectBL implements ISubjectBL {
         return subject;
     }
 
+  /*  @Override
+    public List<PracticalAssignments> getPracticalAssignments(Subject subject) throws DataException {
+        SubjectEntity subjectEntity = subjectEntityfromSubject(subject);
+
+        return subjectListfromEntity(subjectEntity.getPracticalAssignments());
+    }*/
 }

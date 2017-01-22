@@ -54,6 +54,20 @@ public class PracticalAssignmentsEntity implements Serializable {
         this.subject = subject;
     }
 
+
+   /* //OneToMany Example
+    private SubjectEntity subject;
+    @ManyToOne
+    @JoinColumn(name = "subject", referencedColumnName = "id")
+    public SubjectEntity getSubject() {
+        return this.subject;
+    }
+
+    public void setSubject(SubjectEntity subject) {
+        this.subject = subject;
+    }*/
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
